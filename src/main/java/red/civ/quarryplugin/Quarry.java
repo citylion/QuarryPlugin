@@ -9,7 +9,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Random;
+
 public class Quarry {
+
+    Random random = new Random();
 
     int xlen;
     int zlen;
@@ -73,7 +77,22 @@ public class Quarry {
 
 
 
-        b.breakNaturally();
+        //b.breakNaturally();
+        float bhard = b.getType().getHardness();
+        int randomNumber = random.nextInt((int) bhard+1) + 1;
+        Logger.Info("Rand is " + randomNumber);
+        if(randomNumber != 1){
+            return;
+        }
+
+        if(b.getType().equals(Material.CHEST) || b.getType().equals(Material.CHEST)){
+            b.breakNaturally();
+        }
+        else{
+            b.setType(Material.AIR);
+        }
+
+
 
         Logger.Info("Breaking " + b.getLocation());
 

@@ -24,7 +24,7 @@ public class QuarryBlockListener implements Listener {
             Location firsttorch = null;
             Location secondtorch = null;
             Location thirdtorch = null;
-            int maxlook =10;
+            int maxlook =200;
             Block quarryfurnace = event.getBlock();
 
 

@@ -15,7 +15,7 @@ public class QuarryCore {
         Logger.Info("zs size" + zs );
 
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("QuarryPlugin"), new QuarryTask(q), 0l, 5L);
+        scheduler.scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("QuarryPlugin"), new QuarryTask(q), 0l, 2L);
     }
 
 }
