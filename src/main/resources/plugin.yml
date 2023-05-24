@@ -1,0 +1,9 @@
+name: QuarryPlugin
+version: '${project.version}'
+main: red.civ.quarryplugin.QuarryPlugin
+api-version: 1.18
+commands:
+  quarry:
+    description: Makes quarry give 2 args
+    permission:
+    usage: "/quarry"
