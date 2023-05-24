@@ -4,7 +4,8 @@ public class QuarryTask implements Runnable{
 
     Quarry q;
 
-    public QuarryTask(Quarry q) {
+    public QuarryTask(Quarry qu) {
+        q=qu;
     }
 
     @Override
