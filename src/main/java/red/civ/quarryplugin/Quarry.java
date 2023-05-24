@@ -31,16 +31,29 @@ public class Quarry {
 
     private int dir=0;
 
-    public Quarry(Location og, int szx, int szz){
+    public Quarry(Location qf, Location og, int szx, int szz){
 
         mining_origin =og;
+        quarry_furnace=qf;
         xlen=szx;
         zlen=szz;
         pos[0]=0;
         pos[1]=0;
         pos[2]=0;
         dir=0;
+    }
 
+    public Quarry(Location qf, Location og, int szx, int szz, int[] ppos, Location plaspos){
+
+        mining_origin =og;
+        quarry_furnace=qf;
+        xlen=szx;
+        zlen=szz;
+        pos[0]=ppos[0];
+        pos[1]=ppos[0];
+        pos[2]=ppos[0];
+        laspos=plaspos;
+        dir=0;
     }
 
     public void dig(){

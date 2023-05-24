@@ -17,12 +17,6 @@ public class QuarryCommand implements CommandExecutor{
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        Player player = (Player) sender;
-        quarry = new Quarry(player.getLocation(),Integer.parseInt(args[0]),Integer.parseInt(args[1]));
-
-        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        //scheduler.scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("QuarryPlugin"), new QuarryTask(), 0l, 5L);
-
 
         return true;
     }

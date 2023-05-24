@@ -18,6 +18,11 @@ public class QuarryBlockListener implements Listener {
 
         ItemStack inhand = event.getItemInHand();
         Logger.Info("Checking");
+
+        if(inhand.getLore() == null){
+            return;
+        }
+
         if(inhand.getLore().get(0).equals("Quarry Block")){
             Logger.Info("Pass0");
 
@@ -77,7 +82,7 @@ public class QuarryBlockListener implements Listener {
             int sizeX = Math.abs(minX-maxX);
             int sizeZ = Math.abs(minZ-maxZ);
 
-            QuarryCore.addQuarry(secorner,sizeX,sizeZ);
+            QuarryCore.addQuarry(event.getBlock().getLocation(), secorner,sizeX,sizeZ);
 
         }
 

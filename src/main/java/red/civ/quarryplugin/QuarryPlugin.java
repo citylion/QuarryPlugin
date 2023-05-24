@@ -14,12 +14,15 @@ public final class QuarryPlugin extends JavaPlugin {
         //DataSaver.createFiles();
 
         this.getCommand("quarry").setExecutor(new QuarryCommand());
+        Recipe.init();
 
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+
+
     }
 
 }
