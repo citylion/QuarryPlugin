@@ -24,53 +24,55 @@ public class QuarryBlockListener implements Listener {
         }
 
         if(inhand.getLore().get(0).equals("Quarry Block")){
-            Logger.Info("Pass0");
+            Logger.Info("Quarry lore match placed");
 
             Location firsttorch = null;
             Location secondtorch = null;
             Location thirdtorch = null;
-            int maxlook =200;
+            int maxlook =300;
             Block quarryfurnace = event.getBlock();
 
 
             //find first torch;
             if(quarryfurnace.getLocation().add(1,0,0).getBlock().getType().equals(Material.REDSTONE_TORCH)){
-                Logger.Info("Pass1");
+                //Logger.Info("Pass1");
                 firsttorch = quarryfurnace.getLocation().add(1,0,0);
                 secondtorch = findnext(firsttorch,"Z",maxlook);
                 thirdtorch = findnext(firsttorch,"X",maxlook);
-                if(secondtorch == null || thirdtorch ==null){event.getPlayer().sendMessage(error);}
+                if(secondtorch == null || thirdtorch ==null){event.getPlayer().sendMessage(error); return;}
             }
-
-            if(quarryfurnace.getLocation().add(-1,0,0).getBlock().getType().equals(Material.REDSTONE_TORCH)){
-                Logger.Info("Pass2");
+            else if(quarryfurnace.getLocation().add(-1,0,0).getBlock().getType().equals(Material.REDSTONE_TORCH)){
+                //Logger.Info("Pass2");
                 firsttorch = quarryfurnace.getLocation().add(-1,0,0);
                 secondtorch = findnext(firsttorch,"Z",maxlook);
                 thirdtorch = findnext(firsttorch,"X",maxlook);
-                if(secondtorch == null || thirdtorch ==null){event.getPlayer().sendMessage(error);}
+                if(secondtorch == null || thirdtorch ==null){event.getPlayer().sendMessage(error); return;}
             }
 
-            if(quarryfurnace.getLocation().add(0,0,1).getBlock().getType().equals(Material.REDSTONE_TORCH)){
-                Logger.Info("Pass3");
+            else if(quarryfurnace.getLocation().add(0,0,1).getBlock().getType().equals(Material.REDSTONE_TORCH)){
+                //Logger.Info("Pass3");
                 firsttorch = quarryfurnace.getLocation().add(0,0,1);
-                Logger.Info("First torch set to " + firsttorch.toString());
+                //Logger.Info("First torch set to " + firsttorch.toString());
                 secondtorch = findnext(firsttorch,"Z",maxlook);
                 thirdtorch = findnext(firsttorch,"X",maxlook);
-                if(secondtorch == null || thirdtorch ==null){event.getPlayer().sendMessage(error);}
+                if(secondtorch == null || thirdtorch ==null){event.getPlayer().sendMessage(error); return;}
             }
 
-            if(quarryfurnace.getLocation().add(0,0,-1).getBlock().getType().equals(Material.REDSTONE_TORCH)){
-                Logger.Info("Pass4");
+            else if(quarryfurnace.getLocation().add(0,0,-1).getBlock().getType().equals(Material.REDSTONE_TORCH)){
+                //Logger.Info("Pass4");
                 firsttorch = quarryfurnace.getLocation().add(0,0,-1);
                 secondtorch = findnext(firsttorch,"Z",maxlook);
                 thirdtorch = findnext(firsttorch,"X",maxlook);
-                if(secondtorch == null || thirdtorch ==null){event.getPlayer().sendMessage(error);}
+                if(secondtorch == null || thirdtorch ==null){event.getPlayer().sendMessage(error); return;}
             }
-            Logger.Info("Pass5");
+            else{
+                return;
+            }
+            //Logger.Info("Pass5");
 
-            Logger.Info("Torch1: "  + firsttorch.toString());
-            Logger.Info("Torch2: "  + secondtorch.toString());
-            Logger.Info("Torch3: "  + thirdtorch.toString());
+            //Logger.Info("Torch1: "  + firsttorch.toString());
+            //Logger.Info("Torch2: "  + secondtorch.toString());
+            //Logger.Info("Torch3: "  + thirdtorch.toString());
 
             boolean isClear = true;
             int minX = (int) Math.min(Math.min(firsttorch.getX(), secondtorch.getX()), thirdtorch.getX());
@@ -90,23 +92,23 @@ public class QuarryBlockListener implements Listener {
 
     public static Location findnext(Location in, String direction, int maxsearch){//north z---- south z+++++ west x------ east x++++++
         Location current = in.clone();
-        Logger.Info("Asked to findnext with " + direction);
+        //Logger.Info("Asked to findnext with " + direction);
         if(direction.equals("Z")){
             current = in.clone();
             for(int i=1; i<maxsearch;i++) {
                 current.add(0,0,1);
-                Logger.Info("Checking for torch at " + current.toString());
+                //Logger.Info("Checking for torch at " + current.toString());
                 if(current.getBlock().getType().equals(Material.REDSTONE_TORCH)){
-                    Logger.Info("Returning for torch at " + current.toString());
+                    //Logger.Info("Returning for torch at " + current.toString());
                     return current.getBlock().getLocation();
                 }
             }
             current = in.clone();
             for(int i=1; i<maxsearch;i++) {
                 current.add(0,0,-1);
-                Logger.Info("Checking for torch at " + current.toString());
+                //Logger.Info("Checking for torch at " + current.toString());
                 if(current.getBlock().getType().equals(Material.REDSTONE_TORCH)){
-                    Logger.Info("Returning for torch at " + current.toString());
+                    //Logger.Info("Returning for torch at " + current.toString());
                     return current.getBlock().getLocation();
                 }
             }
@@ -115,18 +117,18 @@ public class QuarryBlockListener implements Listener {
             current = in.clone();
             for(int i=1; i<maxsearch;i++) {
                 current.add(1,0,0);
-                Logger.Info("Checking for torch at " + current.toString());
+                //Logger.Info("Checking for torch at " + current.toString());
                 if(current.getBlock().getType().equals(Material.REDSTONE_TORCH)){
-                    Logger.Info("Returning for torch at " + current.toString());
+                    //Logger.Info("Returning for torch at " + current.toString());
                     return current.getBlock().getLocation();
                 }
             }
             current = in.clone();
             for(int i=1; i<maxsearch;i++) {
                 current.add(-1,0,0);
-                Logger.Info("Checking for torch at " + current.toString());
+                //Logger.Info("Checking for torch at " + current.toString());
                 if(current.getBlock().getType().equals(Material.REDSTONE_TORCH)){
-                    Logger.Info("Returning for torch at " + current.toString());
+                    //Logger.Info("Returning for torch at " + current.toString());
                     return current.getBlock().getLocation();
                 }
             }

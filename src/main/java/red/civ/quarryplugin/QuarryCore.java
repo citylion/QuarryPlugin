@@ -4,19 +4,28 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.util.ArrayList;
+
 public class QuarryCore {
 
-
+    public static ArrayList<Quarry> quarrylist = new ArrayList<Quarry>();
 
     public static void addQuarry(Location furnace, Location secnr, int xs, int zs){
+        Logger.Info("Adding a new quary at " + secnr.toString());
         Quarry q = new Quarry(furnace, secnr, xs, zs);
 
-        Logger.Info("SE Quarry origin " + secnr.toString());
-        Logger.Info("xs size " + xs);
-        Logger.Info("zs size" + zs );
+        quarrylist.add(q);
 
-        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("QuarryPlugin"), new QuarryTask(q), 0l, 2L);
+
+    }
+
+    public static void digAll(){
+
+        for(int i=0; i<quarrylist.size();i++){
+            if(quarrylist.get(i).dig()){
+                quarrylist.remove(i);
+            }
+        }
 
     }
 

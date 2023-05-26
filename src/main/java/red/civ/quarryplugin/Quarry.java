@@ -56,8 +56,12 @@ public class Quarry {
         dir=0;
     }
 
-    public void dig(){
-        Logger.Info("Digging");
+    public boolean dig(){
+        //Logger.Info("Digging");
+
+        if(!quarry_furnace.getBlock().getType().equals(Material.FURNACE)){
+            return true;
+        }
 
         if(laspos != null){
             for(int i = laspos.getBlockY(); i<= mining_origin.getBlockY(); i++){
@@ -65,37 +69,37 @@ public class Quarry {
                 laspos.getBlock().setType(Material.AIR);
             }
         }
-        Logger.Info("Digging1");
+        //Logger.Info("Digging1");
         if(mining_origin.getBlockY()+pos[1] < 1){
-            return;
+            return true;
         }
 
 
-        Logger.Info("Digging2");
+        //Logger.Info("Digging2");
         Block b = mining_origin.getWorld().getBlockAt(mining_origin.getBlockX()+pos[0], mining_origin.getBlockY()+pos[1], mining_origin.getBlockZ()+pos[2]);
-        Logger.Info("Digging3");
+        //Logger.Info("Digging3");
         Location aboveb = b.getLocation().add(0,1,0);
 
         aboveb.getBlock().setType(Material.ORANGE_CONCRETE);
 
 
-        Logger.Info("Digging4");
+        //Logger.Info("Digging4");
 
         Location fen = aboveb;
         for(int i = b.getY()+2; i<= mining_origin.getBlockY(); i++){
             fen.setY(i);
             fen.getBlock().setType(Material.OAK_FENCE);
         }
-        Logger.Info("Digging5");
+        //Logger.Info("Digging5");
 
 
 
         //b.breakNaturally();
         float bhard = b.getType().getHardness();
         int randomNumber = random.nextInt((int) bhard+1) + 1;
-        Logger.Info("Rand is " + randomNumber);
+        //Logger.Info("Rand is " + randomNumber);
         if(randomNumber != 1){
-            return;
+            return false;
         }
 
         if(b.getType().equals(Material.CHEST) || b.getType().equals(Material.CHEST)){
@@ -107,23 +111,23 @@ public class Quarry {
 
 
 
-        Logger.Info("Breaking " + b.getLocation());
+        //Logger.Info("Breaking " + b.getLocation());
 
         //Logger.Info(String.valueOf(origin.getWorld().getBlockAt(origin.getBlockX()+pos[0],origin.getBlockY()+pos[1],origin.getBlockZ()+pos[2]).getType()));
         //Logger.Info(String.valueOf(Material.AIR));
         Material btype = b.getType();
         if(btype.equals(Material.AIR) || btype.equals(Material.WATER)){
-            Logger.Info("AIR now");
+            //Logger.Info("AIR now");
 
             if(pos[0]+1<=xlen){
-                Logger.Info("a"+String.valueOf(pos[0]+1));
-                Logger.Info("a"+String.valueOf(xlen));
+                //Logger.Info("a"+String.valueOf(pos[0]+1));
+                //Logger.Info("a"+String.valueOf(xlen));
 
                 pos[0]=pos[0]+1;
             }
             else if(pos[2]+1<=zlen){
-                Logger.Info("b"+String.valueOf(pos[2]+1));
-                Logger.Info("b"+String.valueOf(zlen));
+                //Logger.Info("b"+String.valueOf(pos[2]+1));
+                //Logger.Info("b"+String.valueOf(zlen));
                 pos[0]=0;
                 pos[2]=pos[2]+1;
             }
@@ -134,11 +138,12 @@ public class Quarry {
             }
         }
         else{
-            Logger.Info("Still not air " + mining_origin.getWorld().getBlockAt(mining_origin.getBlockX()+pos[0], mining_origin.getBlockY()+pos[1], mining_origin.getBlockZ()+pos[2]).getType());
+            //Logger.Info("Still not air " + mining_origin.getWorld().getBlockAt(mining_origin.getBlockX()+pos[0], mining_origin.getBlockY()+pos[1], mining_origin.getBlockZ()+pos[2]).getType());
         }
 
         laspos=b.getLocation();
 
+        return false;
     }
 
 
