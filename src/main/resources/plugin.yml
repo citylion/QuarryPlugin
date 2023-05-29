@@ -7,3 +7,7 @@ commands:
     description: Makes quarry give 2 args
     permission:
     usage: "/quarry"
+  qconfig:
+    description: Reads out config, can also reload config with qconfig reload
+    permission:
+    usage: "/qconfig"

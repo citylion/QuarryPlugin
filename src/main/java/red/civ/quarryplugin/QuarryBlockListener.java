@@ -29,7 +29,7 @@ public class QuarryBlockListener implements Listener {
             Location firsttorch = null;
             Location secondtorch = null;
             Location thirdtorch = null;
-            int maxlook =300;
+            int maxlook = Config.maxlook;
             Block quarryfurnace = event.getBlock();
 
 

@@ -13,15 +13,17 @@ public final class QuarryPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        Config.initialize();
         // Plugin startup logic
         this.getServer().getPluginManager().registerEvents(new QuarryBlockListener(), this);
         //DataSaver.createFiles();
 
         this.getCommand("quarry").setExecutor(new QuarryCommand());
+        this.getCommand("qconfig").setExecutor(new ConfigCommand());
         Recipe.init();
 
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("QuarryPlugin"), new QuarryTask(), 0l, 2L);
+        scheduler.scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("QuarryPlugin"), new QuarryTask(), 0l, Config.tickspeed);
 
     }
 

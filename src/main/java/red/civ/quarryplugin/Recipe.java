@@ -17,6 +17,12 @@ public class Recipe {
 
 
     public static void init(){
+
+        if(Config.defaultrecipe == false){
+            return;
+        }
+        Logger.Info("Enabling default recipe");
+
         qitem = new ItemStack(Material.FURNACE);
         List<String> lore = new ArrayList<>();
         lore.add("Quarry Block");

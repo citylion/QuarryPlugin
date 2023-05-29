@@ -33,7 +33,7 @@ public class Quarry {
 
     public Quarry(Location qf, Location og, int szx, int szz){
 
-        mining_origin =og;
+        mining_origin =og.add(0,1,0);
         quarry_furnace=qf;
         xlen=szx;
         zlen=szz;
@@ -45,7 +45,7 @@ public class Quarry {
 
     public Quarry(Location qf, Location og, int szx, int szz, int[] ppos, Location plaspos){
 
-        mining_origin =og;
+        mining_origin =og.add(0,1,0);
         quarry_furnace=qf;
         xlen=szx;
         zlen=szz;

@@ -14,13 +14,36 @@ public class Config {
     public static void initialize(){
 
         Plugin plugin = Bukkit.getPluginManager().getPlugin("QuarryPlugin");
-
-        Configuration configuration = null;
+        plugin.reloadConfig();
+        Configuration configuration = plugin.getConfig();
         configuration.addDefault("maxlook",50);
         configuration.addDefault("defaultrecipe",true);
         configuration.addDefault("tickspeed",5);
         plugin.saveDefaultConfig();
 
+        maxlook = configuration.getInt("maxlook");
+        defaultrecipe = configuration.getBoolean("defaultrecipe");
+        tickspeed  = configuration.getInt("tickspeed");
+        Logger.Info("maxlook is " + maxlook);
+        Logger.Info("defaultrecipe " + defaultrecipe);
+        Logger.Info("tickspeed " + tickspeed);
+
+    }
+
+    public static void reload(){
+
+        Plugin plugin = Bukkit.getPluginManager().getPlugin("QuarryPlugin");
+        plugin.reloadConfig();
+        Configuration configuration = plugin.getConfig();
+
+
+        Logger.Info("Reloading Config");
+        maxlook = configuration.getInt("maxlook");
+        defaultrecipe = configuration.getBoolean("defaultrecipe");
+        tickspeed  = configuration.getInt("tickspeed");
+        Logger.Info("maxlook is " + maxlook);
+        Logger.Info("defaultrecipe " + defaultrecipe);
+        Logger.Info("tickspeed " + tickspeed);
 
 
     }
