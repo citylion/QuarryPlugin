@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataSaver {
-
+/*
     static File pluginFolder;
     static String filename = "Quarries.txt";
 
@@ -18,15 +18,7 @@ public class DataSaver {
 
 
 
-    /*
-    static {
-        URL url = DataSaver.class.getProtectionDomain().getCodeSource().getLocation();
-        try {
-            pluginFolder = new File(url.toURI().getPath()).getParentFile();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }*/
+
 
     static {
         URL url = DataSaver.class.getProtectionDomain().getCodeSource().getLocation();
@@ -148,19 +140,7 @@ public class DataSaver {
         List<String> lines = new ArrayList<>();
 
         f.delete();
-        /*
-        try (BufferedReader reader = new BufferedReader(new FileReader(f))) {
-            //Bukkit.getLogger().info("Before we write anything, we need to read first.");
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-
-                lines.add(null);
-                //Bukkit.getLogger().info("Adding a line to the file reader. " + line);
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred while reading the file: " + e.getMessage());
-        }*/
 
     }
 
@@ -200,5 +180,5 @@ public class DataSaver {
         return "NULL";//meaning no datapoint exists // other big problem
 
     }
-
+*/
 }

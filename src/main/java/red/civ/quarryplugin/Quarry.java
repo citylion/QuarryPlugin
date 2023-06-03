@@ -3,9 +3,11 @@ package red.civ.quarryplugin;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -106,7 +108,9 @@ public class Quarry {
             b.breakNaturally();
         }
         else{
+            ItemStack olditem = new ItemStack(b.getType(), 1);
             b.setType(Material.AIR);
+            chestchad(quarry_furnace,olditem);
         }
 
 
@@ -143,6 +147,24 @@ public class Quarry {
 
         laspos=b.getLocation();
 
+        return false;
+    }
+
+    public void chestchad(Location location, ItemStack toadd){
+        Location search = location.clone();
+        search.add(1,0,0); if(depositsearch(search,toadd)){return;}
+        search.add(-2,0,0); if(depositsearch(search,toadd)){return;}
+        search.add(1,0,1); if(depositsearch(search,toadd)){return;}
+        search.add(0,0,-2); if(depositsearch(search,toadd)){}
+    }
+
+    public boolean depositsearch(Location search, ItemStack toadd){
+        Chest chest = null;
+        if(search.getBlock().getType().equals(Material.CHEST)){
+            chest = (Chest) search.getBlock().getState();
+            chest.getInventory().addItem(toadd);
+            return true;
+        }
         return false;
     }
 

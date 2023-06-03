@@ -15,20 +15,13 @@ public class QuarryCore {
         Quarry q = new Quarry(furnace, secnr, xs, zs);
 
         quarrylist.add(q);
-
-
     }
 
     public static void digAll(){
-
         for(int i=0; i<quarrylist.size();i++){
             if(quarrylist.get(i).dig()){
                 quarrylist.remove(i);
             }
         }
-
     }
-
-
-
 }
