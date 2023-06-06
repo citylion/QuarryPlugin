@@ -17,13 +17,13 @@ public class QuarryBlockListener implements Listener {
     public static void onPlace(BlockPlaceEvent event){
 
         ItemStack inhand = event.getItemInHand();
-        Logger.Info("Checking");
+        //Logger.Info("Checking");
 
-        if(inhand.getLore() == null){
+        if(inhand.getItemMeta().getLore() == null){
             return;
         }
 
-        if(inhand.getLore().get(0).equals("Quarry Block")){
+        if(inhand.getItemMeta().getLore().get(0).equals("Quarry Block")){
             Logger.Info("Quarry lore match placed");
 
             Location firsttorch = null;

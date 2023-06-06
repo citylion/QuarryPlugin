@@ -1,5 +1,6 @@
 package red.civ.quarryplugin;
 
+import org.bukkit.BlockChangeDelegate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class Quarry {
@@ -151,21 +153,67 @@ public class Quarry {
     }
 
     public void chestchad(Location location, ItemStack toadd){
+        int maxlook = 10;
         Location search = location.clone();
-        search.add(1,0,0); if(depositsearch(search,toadd)){return;}
-        search.add(-2,0,0); if(depositsearch(search,toadd)){return;}
-        search.add(1,0,1); if(depositsearch(search,toadd)){return;}
-        search.add(0,0,-2); if(depositsearch(search,toadd)){}
+        int result = -1;
+        for(int i=0; i<maxlook; i++){
+            search.add(1,0,0);
+            result = depositsearch(search,toadd);
+            //Logger.Info("CHECKING " + search);
+            if(result==1){return;}
+            else if(result==0){
+                break;
+            }
+        }
+        search=location.clone();
+        for(int i=0; i<maxlook; i++){
+            search.add(-1,0,0);
+            result = depositsearch(search,toadd);
+            //Logger.Info("CHECKING " + search);
+            if(result==1){return;}
+            else if(result==0){
+                break;
+            }
+        }
+        search=location.clone();
+        for(int i=0; i<maxlook; i++){
+            search.add(0,0,1);
+            result = depositsearch(search,toadd);
+            //Logger.Info("CHECKING " + search);
+            if(result==1){return;}
+            else if(result==0){
+                break;
+            }
+        }
+        search=location.clone();
+        for(int i=0; i<maxlook; i++){
+            search.add(0,0,-1);
+            result = depositsearch(search,toadd);
+            //Logger.Info("CHECKING " + search);
+            if(result==1){return;}
+            else if(result==0){
+                break;
+            }
+        }
     }
 
-    public boolean depositsearch(Location search, ItemStack toadd){
+    public int depositsearch(Location search, ItemStack toadd){
         Chest chest = null;
+        //Logger.Info("The block type at " + search + " is " + search.getBlock().getType());
         if(search.getBlock().getType().equals(Material.CHEST)){
+            //Logger.Info("IN CHECK");
             chest = (Chest) search.getBlock().getState();
-            chest.getInventory().addItem(toadd);
-            return true;
+            HashMap notin = null;
+            notin = chest.getInventory().addItem(toadd);
+            if(!notin.isEmpty()){
+                //Logger.Info("Notin is not empty");
+                return 2;//look for chests next to
+            }
+            //Logger.Info("Success filled");
+            return 1;//success filled
         }
-        return false;
+        //Logger.Info("UnSuccess filled");
+        return 0;//unsuccess
     }
 
 
