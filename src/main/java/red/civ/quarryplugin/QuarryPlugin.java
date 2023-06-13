@@ -14,6 +14,7 @@ public final class QuarryPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         Config.initialize();
+        QuarryCore.makelist();
         // Plugin startup logic
         this.getServer().getPluginManager().registerEvents(new QuarryBlockListener(), this);
         //DataSaver.createFiles();
@@ -30,8 +31,7 @@ public final class QuarryPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-
-
+        QuarryCore.seralizeactive();
     }
 
 }

@@ -1,6 +1,7 @@
 package red.civ.quarryplugin;
 
 import org.bukkit.BlockChangeDelegate;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,10 +13,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Random;
 
-public class Quarry {
+public class Quarry implements Serializable {
 
     Random random = new Random();
 
@@ -24,11 +26,14 @@ public class Quarry {
 
     int pos[] = new int[3];
 
-    Location mining_origin;
+    SLoc s_mining_origin;
+    transient Location mining_origin;
 
-    Location quarry_furnace;
+    SLoc s_quarry_furance;
+    transient Location quarry_furnace;
 
-    Location laspos;
+    SLoc s_laspos;
+    transient Location laspos;
 
     private int dirx=+1;//directionality of x scanning
     private int dirz=+1;//directionality of z scanning
@@ -47,6 +52,13 @@ public class Quarry {
         dir=0;
     }
 
+    public void updateSLOCS(){
+        s_laspos = SLoc.quickSLOC(laspos);
+        s_mining_origin = SLoc.quickSLOC(mining_origin);
+        s_quarry_furance = SLoc.quickSLOC(quarry_furnace);
+    }
+
+    /*
     public Quarry(Location qf, Location og, int szx, int szz, int[] ppos, Location plaspos){
 
         mining_origin =og.add(0,1,0);
@@ -58,14 +70,42 @@ public class Quarry {
         pos[2]=ppos[0];
         laspos=plaspos;
         dir=0;
+    }*/
+
+    public Location unfuckLocation(SLoc loc){
+        return new Location(Bukkit.getWorld(loc.worldname),loc.x,loc.y,loc.z);
+    }
+
+    public boolean unfuckALLLocations(){
+        try {
+            if (mining_origin == null) {
+                mining_origin = unfuckLocation(s_mining_origin);
+            }
+            if (quarry_furnace == null) {
+                quarry_furnace = unfuckLocation(s_quarry_furance);
+            }
+            if (laspos == null) {
+                laspos = unfuckLocation(s_laspos);
+            }
+            return false;
+        }
+        catch (Exception e){
+
+            Logger.Warn("Forced to remove a quarry. Please report this bug");
+            e.printStackTrace();
+            return true;
+        }
     }
 
     public boolean dig(){
+
+
         //Logger.Info("Digging");
 
         if(!quarry_furnace.getBlock().getType().equals(Material.FURNACE)){
             return true;
         }
+
 
         if(laspos != null){
             for(int i = laspos.getBlockY(); i<= mining_origin.getBlockY(); i++){
@@ -148,7 +188,7 @@ public class Quarry {
         }
 
         laspos=b.getLocation();
-
+        updateSLOCS();
         return false;
     }
 
