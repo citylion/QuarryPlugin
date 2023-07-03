@@ -26,6 +26,11 @@ public final class QuarryPlugin extends JavaPlugin {
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
         scheduler.scheduleSyncRepeatingTask(Bukkit.getPluginManager().getPlugin("QuarryPlugin"), new QuarryTask(), 0l, Config.tickspeed);
 
+
+        Metrics metrics = new Metrics(this,18755);
+
+
+
     }
 
     @Override

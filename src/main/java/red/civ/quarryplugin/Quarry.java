@@ -1,11 +1,9 @@
 package red.civ.quarryplugin;
 
-import org.bukkit.BlockChangeDelegate;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Furnace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -26,6 +24,8 @@ public class Quarry implements Serializable {
 
     int pos[] = new int[3];
 
+    Fuel quarryfuelstore;
+
     SLoc s_mining_origin;
     transient Location mining_origin;
 
@@ -42,6 +42,8 @@ public class Quarry implements Serializable {
 
     public Quarry(Location qf, Location og, int szx, int szz){
 
+        quarryfuelstore = new Fuel();
+        quarryfuelstore.fuel_level=10;
         mining_origin =og.add(0,1,0);
         quarry_furnace=qf;
         xlen=szx;
@@ -99,10 +101,18 @@ public class Quarry implements Serializable {
 
     public boolean dig(){
 
-
-        //Logger.Info("Digging");
-
+        //REMOVE CASES
+        if(this.quarry_furnace == null){
+            String msg = "CANNOTPARSE";
+            if(s_quarry_furance != null){
+                msg = s_quarry_furance.toString();
+            }
+            Logger.Warn("Forced to remove a null quarry, at " + msg);
+            return true;
+        }
         if(!quarry_furnace.getBlock().getType().equals(Material.FURNACE)){
+
+            Logger.Warn("Forced to remove a quarry due to no quarry block, at " + quarry_furnace.toString());
             return true;
         }
 
@@ -113,9 +123,32 @@ public class Quarry implements Serializable {
                 laspos.getBlock().setType(Material.AIR);
             }
         }
-        //Logger.Info("Digging1");
-        if(mining_origin.getBlockY()+pos[1] < 1){
+
+        if(mining_origin.getBlockY()+pos[1] < 1){//set this to be like -60 or whatever l8rrrrr
             return true;
+        }
+
+        //Logger.Warn("Fuel is " + quarryfuelstore.fuel_level);
+        if(Config.consumefuel){
+            //Logger.Warn("consumefueltrue");
+            //logic to prevent quarry from running if low fuel AND logic to consume fuel as needed
+
+            if(quarry_furnace.clone().add(0,1,0).getBlock().getType().equals(Material.CHEST)){
+                Chest fuelchest = (Chest) quarry_furnace.clone().add(0,1,0).getBlock().getState();
+                Inventory fuels = fuelchest.getInventory();
+                //Logger.Warn("looking fuel here");
+                for(int i=0; i < fuels.getSize();i++){
+                    ItemStack itemStack = fuels.getItem(i);
+                    if(itemStack != null) {
+                        if (quarryfuelstore.refueltick(itemStack.getType())) {
+                            itemStack.setAmount(itemStack.getAmount() - 1);
+                        }
+                    }
+                }
+            }
+
+
+
         }
 
 
@@ -135,34 +168,56 @@ public class Quarry implements Serializable {
             fen.getBlock().setType(Material.OAK_FENCE);
         }
         //Logger.Info("Digging5");
+        Material btype = b.getType();
+
+        if(!(btype.equals(Material.WATER) || btype.equals(Material.LAVA))) {
+
+            if(Config.consumefuel){//prevent quarry if out of fuel
+                if(quarryfuelstore.consumetick()){
+                    Player nearest = (Player) quarry_furnace.getWorld().getNearbyEntities(quarry_furnace, 6, 6, 6).stream()
+                            .filter(e -> e instanceof Player)
+                            .findFirst()
+                            .orElse(null);
+                    if(nearest != null){
+                        int randmsgchance = random.nextInt(15);
+                        if(randmsgchance==10){
+                            nearest.sendMessage(ChatColor.RED + "Your quarry is out of fuel! Put a chest above the quarry with coal/charcoal");
+                        }
+                    }
+                    return false;
+                }
+            }
 
 
+            //b.breakNaturally();
+            float bhard = b.getType().getHardness();
 
-        //b.breakNaturally();
-        float bhard = b.getType().getHardness();
-        int randomNumber = random.nextInt((int) bhard+1) + 1;
-        //Logger.Info("Rand is " + randomNumber);
-        if(randomNumber != 1){
-            return false;
+            if(bhard <0 || bhard >2000){
+                return false;
+            }
+
+            int randomNumber = random.nextInt((int) bhard + 1) + 1;
+            //Logger.Info("Rand is " + randomNumber);
+            if (randomNumber != 1) {
+                return false;
+            }
+
+            if (b.getType().equals(Material.CHEST) || b.getType().equals(Material.CHEST)) {
+                b.breakNaturally();
+            } else {
+                ItemStack olditem = new ItemStack(b.getType(), 1);
+                b.setType(Material.AIR);
+                chestchad(quarry_furnace, olditem);
+            }
         }
-
-        if(b.getType().equals(Material.CHEST) || b.getType().equals(Material.CHEST)){
-            b.breakNaturally();
-        }
-        else{
-            ItemStack olditem = new ItemStack(b.getType(), 1);
-            b.setType(Material.AIR);
-            chestchad(quarry_furnace,olditem);
-        }
-
 
 
         //Logger.Info("Breaking " + b.getLocation());
 
         //Logger.Info(String.valueOf(origin.getWorld().getBlockAt(origin.getBlockX()+pos[0],origin.getBlockY()+pos[1],origin.getBlockZ()+pos[2]).getType()));
         //Logger.Info(String.valueOf(Material.AIR));
-        Material btype = b.getType();
-        if(btype.equals(Material.AIR) || btype.equals(Material.WATER)){
+
+        if(btype.equals(Material.AIR) || btype.equals(Material.WATER) || btype.equals(Material.LAVA)){
             //Logger.Info("AIR now");
 
             if(pos[0]+1<=xlen){

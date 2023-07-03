@@ -26,6 +26,7 @@ public class ConfigCommand implements CommandExecutor {
         sender.sendMessage("Maxlook is " + Config.maxlook);
         sender.sendMessage("DefaultRecipe enabled is " + Config.defaultrecipe);
         sender.sendMessage("Quarry tick speed is " + Config.tickspeed);
+        sender.sendMessage("Quarry should consume fuel is " + Config.consumefuel);
         return true;
     }
 }
