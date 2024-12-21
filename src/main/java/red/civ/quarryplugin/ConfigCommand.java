@@ -1,5 +1,6 @@
 package red.civ.quarryplugin;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,14 +14,13 @@ public class ConfigCommand implements CommandExecutor {
         if(args.length==1 && args[0].equals("reload")){
 
             if(sender.isOp()){
-                Config.reload();
-                sender.sendMessage("Config reloaded. You will need to restart for certain parameters like defaultrecipe and tickspeed to take effect.");
+                sender.sendMessage(ChatColor.YELLOW+"Config reloaded. You may need to restart for changes to certain parameters like defaultrecipe to take effect.");
+                QuarryPlugin.config.initialize(QuarryPlugin.INSTANCE);
             }
             else{
                 sender.sendMessage("You must be an operator to reload this config");
             }
             return true;
-
         }
 
         sender.sendMessage("Maxlook is " + Config.maxlook);

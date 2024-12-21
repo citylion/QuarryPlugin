@@ -1,5 +1,5 @@
-maxlook: 50
+maxlook: 64
 defaultrecipe: true
-tickspeed: 5 #lower is faster!!!
+tickspeed: 7 #lower is faster!!!
 consumefuel: true
 

@@ -8,12 +8,19 @@ import javax.xml.crypto.Data;
 
 public final class QuarryPlugin extends JavaPlugin {
 
-    public QuarryPlugin quarryPlugin = this;
 
+    public static Config config;
+
+    public static QuarryPlugin INSTANCE;
 
     @Override
     public void onEnable() {
-        Config.initialize();
+        INSTANCE=this;
+
+        Config config = new Config();
+        this.config=config;
+        config.initialize(this);
+
         QuarryCore.makelist();
         // Plugin startup logic
         this.getServer().getPluginManager().registerEvents(new QuarryBlockListener(), this);

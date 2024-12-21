@@ -1,8 +1,6 @@
 package red.civ.quarryplugin;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -57,7 +55,7 @@ public class QuarryCore {
             fileInputStream.close();
 
             for(int i=0; i<quarrylist.size();i++){
-                if(quarrylist.get(i).unfuckALLLocations()){
+                if(quarrylist.get(i).unadaptAllLocations()){
                     quarrylist.remove(i);//exception catcher
                 }
             }

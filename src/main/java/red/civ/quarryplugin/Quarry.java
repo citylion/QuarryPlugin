@@ -3,13 +3,9 @@ package red.civ.quarryplugin;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.block.Furnace;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -40,6 +36,10 @@ public class Quarry implements Serializable {
 
     private int dir=0;
 
+    private int bedrockHits = 0;
+
+    public boolean REMOVED = false;
+
     public Quarry(Location qf, Location og, int szx, int szz){
 
         quarryfuelstore = new Fuel();
@@ -60,34 +60,22 @@ public class Quarry implements Serializable {
         s_quarry_furance = SLoc.quickSLOC(quarry_furnace);
     }
 
-    /*
-    public Quarry(Location qf, Location og, int szx, int szz, int[] ppos, Location plaspos){
 
-        mining_origin =og.add(0,1,0);
-        quarry_furnace=qf;
-        xlen=szx;
-        zlen=szz;
-        pos[0]=ppos[0];
-        pos[1]=ppos[0];
-        pos[2]=ppos[0];
-        laspos=plaspos;
-        dir=0;
-    }*/
 
-    public Location unfuckLocation(SLoc loc){
+    public Location unadaptLocation(SLoc loc){
         return new Location(Bukkit.getWorld(loc.worldname),loc.x,loc.y,loc.z);
     }
 
-    public boolean unfuckALLLocations(){
+    public boolean unadaptAllLocations(){
         try {
             if (mining_origin == null) {
-                mining_origin = unfuckLocation(s_mining_origin);
+                mining_origin = unadaptLocation(s_mining_origin);
             }
             if (quarry_furnace == null) {
-                quarry_furnace = unfuckLocation(s_quarry_furance);
+                quarry_furnace = unadaptLocation(s_quarry_furance);
             }
             if (laspos == null) {
-                laspos = unfuckLocation(s_laspos);
+                laspos = unadaptLocation(s_laspos);
             }
             return false;
         }
@@ -107,24 +95,32 @@ public class Quarry implements Serializable {
             if(s_quarry_furance != null){
                 msg = s_quarry_furance.toString();
             }
+            REMOVED=true;
             Logger.Warn("Forced to remove a null quarry, at " + msg);
             return true;
         }
-        if(!quarry_furnace.getBlock().getType().equals(Material.FURNACE)){
-
+        if(!quarry_furnace.getBlock().getType().equals(Material.FURNACE)  || bedrockHits>0){
+            if(Config.returnQuarryOnBreak){
+                Location loc = unadaptLocation(s_quarry_furance);
+                loc.getWorld().dropItem(loc,Recipe.qitem);
+            }
             Logger.Warn("Forced to remove a quarry due to no quarry block, at " + quarry_furnace.toString());
+            REMOVED=true;
             return true;
         }
 
 
         if(laspos != null){
             for(int i = laspos.getBlockY(); i<= mining_origin.getBlockY(); i++){
+
                 laspos.setY(i);
-                laspos.getBlock().setType(Material.AIR);
+                if(i>-64){
+                    laspos.getBlock().setType(Material.AIR);
+                }
             }
         }
 
-        if(mining_origin.getBlockY()+pos[1] < 1){//set this to be like -60 or whatever l8rrrrr
+        if(mining_origin.getBlockY()+pos[1] < -64){//set this to be -64 or 0
             return true;
         }
 
@@ -154,6 +150,12 @@ public class Quarry implements Serializable {
 
         //Logger.Info("Digging2");
         Block b = mining_origin.getWorld().getBlockAt(mining_origin.getBlockX()+pos[0], mining_origin.getBlockY()+pos[1], mining_origin.getBlockZ()+pos[2]);
+
+        if(b.getType().equals(Material.BEDROCK)){
+            bedrockHits++;
+            return true;
+        }
+
         //Logger.Info("Digging3");
         Location aboveb = b.getLocation().add(0,1,0);
 

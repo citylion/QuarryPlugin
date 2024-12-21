@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -87,6 +88,13 @@ public class QuarryBlockListener implements Listener {
             QuarryCore.addQuarry(event.getBlock().getLocation(), secorner,sizeX,sizeZ);
 
         }
+
+    }
+
+    @EventHandler
+    public static void dropQuarryOnBreak(BlockBreakEvent e){
+
+
 
     }
 
